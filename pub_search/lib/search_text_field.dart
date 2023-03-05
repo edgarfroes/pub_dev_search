@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-import 'theme.dart';
-
 class SearchTextField extends StatefulWidget {
   const SearchTextField({
     super.key,
@@ -34,7 +32,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
       autoplay: false,
     );
 
-    Future<void> sleepBeforeExpandOrShrink() async {
+    Future<void> sleepBeforeResizing() async {
       await Future.delayed(const Duration(milliseconds: 400));
     }
 
@@ -50,12 +48,12 @@ class _SearchTextFieldState extends State<SearchTextField> {
 
         _startSearchController.isActive = true;
 
-        await sleepBeforeExpandOrShrink();
+        await sleepBeforeResizing();
 
         setState(() {
           _expanded = _focusNode.hasFocus || _controller.text.isNotEmpty;
           _showSearchIcon = false;
-          _cursorColor = foregroundColor;
+          _cursorColor = null;
         });
 
         return;
@@ -67,12 +65,12 @@ class _SearchTextFieldState extends State<SearchTextField> {
 
       setState(() {
         _showSearchIcon = true;
-        _cursorColor = backgroundColor;
+        _cursorColor = Colors.transparent;
       });
 
       _finishSearchController.isActive = true;
 
-      await sleepBeforeExpandOrShrink();
+      await sleepBeforeResizing();
 
       setState(() {
         _expanded = false;
@@ -86,7 +84,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
   late final SimpleAnimation _startSearchController;
   late final SimpleAnimation _finishSearchController;
   late final Artboard _artboard;
-  Color _cursorColor = Colors.transparent;
+  Color? _cursorColor;
   bool _expanded = false;
   bool _showSearchIcon = true;
 
@@ -95,6 +93,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
       width: _expanded ? expandedWidth : closedWidth,
@@ -102,7 +102,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(closedWidth),
         border: Border.all(
-          color: foregroundColor,
+          color: theme.primaryColor,
           width: 2,
         ),
       ),
@@ -119,9 +119,6 @@ class _SearchTextFieldState extends State<SearchTextField> {
             cursorWidth: 2.3,
             cursorHeight: 17.3,
             onChanged: widget.onChanged,
-            style: const TextStyle(
-              color: foregroundColor,
-            ),
             maxLines: _expanded ? null : 1,
             keyboardType: TextInputType.multiline,
             decoration: const InputDecoration(
@@ -132,7 +129,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
             ),
           ),
           Positioned(
-            left: 15.5,
+            left: 14,
             child: GestureDetector(
               onTap: _focusNode.requestFocus,
               child: SizedBox(
