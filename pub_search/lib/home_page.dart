@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   final _textFieldFocusNode = FocusNode();
 
   final _client = PubClient();
-  final box = GetStorage();
+  final _box = GetStorage();
 
   final _foundPackages = <String>[];
   final _recentSearches = <String>[];
@@ -38,8 +38,8 @@ class _HomePageState extends State<HomePage> {
 
   bool _showNoRecentSearchesMessage = true;
   bool _showRecentSearches = false;
-  bool _showNoPackagesFound = false;
-  bool _showFoundPackages = false;
+  bool _showNoPackagesFoundMessage = false;
+  bool _showSearchResult = false;
 
   void _updateVisualization() {
     setState(() {
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
 
   void _updateRecentSearchesFromStorage() {
     final storedRecentSearches =
-        (box.read<List<dynamic>>('packages') ?? []).cast<String>();
+        (_box.read<List<dynamic>>('packages') ?? []).cast<String>();
 
     if (storedRecentSearches.isNotEmpty) {
       _recentSearches.clear();
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
   void _searchPackages(String term) async {
     if (_isSearching) {
       setState(() {
-        _showNoPackagesFound = false;
+        _showNoPackagesFoundMessage = false;
         _showNoRecentSearchesMessage = false;
         _showRecentSearches = false;
       });
@@ -77,16 +77,16 @@ class _HomePageState extends State<HomePage> {
           searchResults.packages.take(5).map((x) => x.package),
         );
 
-        _showNoPackagesFound = _foundPackages.isEmpty;
-        _showFoundPackages = _foundPackages.isNotEmpty;
+        _showNoPackagesFoundMessage = _foundPackages.isEmpty;
+        _showSearchResult = _foundPackages.isNotEmpty;
       });
 
       return;
     }
 
     setState(() {
-      _showFoundPackages = false;
-      _showNoPackagesFound = false;
+      _showSearchResult = false;
+      _showNoPackagesFoundMessage = false;
       _showNoRecentSearchesMessage = _recentSearches.isEmpty;
       _showRecentSearches = _recentSearches.isNotEmpty;
       _foundPackages.clear();
@@ -138,11 +138,11 @@ class _HomePageState extends State<HomePage> {
                     packages: _recentSearches,
                     onSelectPackage: _goToPackageDetailsPage,
                   ),
-                if (_showNoPackagesFound)
+                if (_showNoPackagesFoundMessage)
                   const RoundedContainer(
                     child: Text('No packages found'),
                   ),
-                if (_showFoundPackages)
+                if (_showSearchResult)
                   PackageList(
                     packages: _foundPackages,
                     onSelectPackage: (String packageName) async {
@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                       _recentSearches.clear();
                     });
 
-                    await box.erase();
+                    await _box.erase();
 
                     _updateVisualization();
                   },
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
         _recentSearches.insert(0, packageName);
       });
 
-      await box.write('packages', _recentSearches);
+      await _box.write('packages', _recentSearches);
     }
   }
 }
