@@ -58,4 +58,9 @@ final mainTheme = ThemeData(
     space: 1,
   ),
   primaryTextTheme: _baseTextTheme,
+  progressIndicatorTheme: ProgressIndicatorThemeData(
+    color: colorScheme.shade500,
+    refreshBackgroundColor: colorScheme.shade900,
+    linearTrackColor: colorScheme.shade900,
+  ),
 );

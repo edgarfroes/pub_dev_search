@@ -34,18 +34,21 @@ class _HomePageState extends State<HomePage> {
   final _foundPackages = <String>[];
   final _recentSearches = <String>[];
 
-  bool get _isSearching => _textFieldController.text.length >= 2;
+  bool get _isInSearchingMode => _textFieldController.text.length >= 2;
 
   bool _showNoRecentSearchesMessage = true;
   bool _showRecentSearches = false;
   bool _showNoPackagesFoundMessage = false;
   bool _showSearchResult = false;
+  bool _errorFetchingPackages = false;
+  bool _loadingPackages = false;
 
   void _updateVisualization() {
     setState(() {
-      _showRecentSearches = _recentSearches.isNotEmpty && !_isSearching;
+      _showRecentSearches = _recentSearches.isNotEmpty && !_isInSearchingMode;
 
-      _showNoRecentSearchesMessage = _recentSearches.isEmpty && !_isSearching;
+      _showNoRecentSearchesMessage =
+          _recentSearches.isEmpty && !_isInSearchingMode;
     });
   }
 
@@ -62,30 +65,46 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _searchPackages(String term) async {
-    if (_isSearching) {
+    if (_isInSearchingMode) {
       setState(() {
+        _loadingPackages = true;
         _showNoPackagesFoundMessage = false;
         _showNoRecentSearchesMessage = false;
         _showRecentSearches = false;
+        _errorFetchingPackages = false;
       });
 
-      final searchResults = await _client.search(term);
+      try {
+        final searchResults = await _client.search(term);
 
-      setState(() {
-        _foundPackages.clear();
-        _foundPackages.addAll(
-          searchResults.packages.take(5).map((x) => x.package),
-        );
+        setState(() {
+          _foundPackages.clear();
+          _foundPackages.addAll(
+            searchResults.packages.take(5).map((x) => x.package),
+          );
 
-        _showNoPackagesFoundMessage = _foundPackages.isEmpty;
-        _showSearchResult = _foundPackages.isNotEmpty;
-      });
+          _showNoPackagesFoundMessage = _foundPackages.isEmpty;
+          _showSearchResult = _foundPackages.isNotEmpty;
+        });
+      } catch (e) {
+        setState(() {
+          _errorFetchingPackages = true;
+          _showSearchResult = false;
+          _showNoPackagesFoundMessage = false;
+        });
+      } finally {
+        setState(() {
+          _loadingPackages = false;
+        });
+      }
 
       return;
     }
 
     setState(() {
+      _loadingPackages = false;
       _showSearchResult = false;
+      _errorFetchingPackages = false;
       _showNoPackagesFoundMessage = false;
       _showNoRecentSearchesMessage = _recentSearches.isEmpty;
       _showRecentSearches = _recentSearches.isNotEmpty;
@@ -125,10 +144,19 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 6,
                 ),
+                if (_loadingPackages && !_showSearchResult)
+                  const CircularProgressIndicator(),
                 if (_showNoRecentSearchesMessage)
                   const RoundedContainer(
                     child: Text(
                       'No Recent Searches',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                if (_errorFetchingPackages)
+                  const RoundedContainer(
+                    child: Text(
+                      'Error searching packages',
                       textAlign: TextAlign.center,
                     ),
                   ),

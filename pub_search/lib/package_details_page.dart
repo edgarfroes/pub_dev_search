@@ -22,7 +22,7 @@ class _PackageDetailsPageState extends State<PackageDetailsPage> {
 
   Future<void> _fetchPackageDetails() async {
     setState(() {
-      _loading = true;
+      _loadingInfo = true;
     });
 
     // Call all APIs asynchronously
@@ -40,13 +40,13 @@ class _PackageDetailsPageState extends State<PackageDetailsPage> {
     ]);
 
     setState(() {
-      _loading = false;
+      _loadingInfo = false;
     });
   }
 
   final _client = PubClient();
 
-  bool _loading = false;
+  bool _loadingInfo = false;
 
   int? _likes;
   int? _pubPoints;
@@ -99,10 +99,8 @@ class _PackageDetailsPageState extends State<PackageDetailsPage> {
                         constraints: const BoxConstraints(minHeight: 62),
                         child: Column(
                           children: [
-                            if (_loading == true)
-                              LinearProgressIndicator(
-                                backgroundColor: theme.primaryColorDark,
-                              ),
+                            if (_loadingInfo == true)
+                              const LinearProgressIndicator(),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 15,
