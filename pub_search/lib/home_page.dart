@@ -4,7 +4,7 @@ import 'package:pub_search/search_text_field.dart';
 
 import 'package_details_page.dart';
 import 'package_list.dart';
-import 'rounder_container.dart';
+import 'rounded_container.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final _textFieldController = TextEditingController();
   final _textFieldFocusNode = FocusNode();
 
-  final client = PubClient();
+  final _client = PubClient();
 
   final _foundPackages = <String>[];
   final _recentSearches = <String>[];
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
         _showRecentSearches = false;
       });
 
-      final searchResults = await client.search(term);
+      final searchResults = await _client.search(term);
 
       setState(() {
         _foundPackages.clear();
