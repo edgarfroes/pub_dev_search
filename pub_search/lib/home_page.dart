@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:pub_api_client/pub_api_client.dart';
 import 'package:pub_search/search_text_field.dart';
 
@@ -14,45 +15,57 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _textFieldController = TextEditingController();
-  final _textFieldFocusNode = FocusNode();
-
-  final _client = PubClient();
-
-  final _foundPackages = <String>[];
-  final _recentSearches = <String>[];
-
   @override
   void initState() {
     super.initState();
 
     _textFieldFocusNode.addListener(_updateVisualization);
     _textFieldController.addListener(_updateVisualization);
+
+    _updateRecentSearchesFromStorage();
   }
 
-  void _updateVisualization() {
-    setState(() {
-      _showNoRecentSearches =
-          _recentSearches.isEmpty && _foundPackages.isEmpty && !_isSearching;
+  final _textFieldController = TextEditingController();
+  final _textFieldFocusNode = FocusNode();
 
-      _showRecentSearches = _recentSearches.isNotEmpty && !_isSearching;
+  final _client = PubClient();
+  final box = GetStorage();
 
-      _showNoRecentSearches = _recentSearches.isEmpty && !_isSearching;
-    });
-  }
+  final _foundPackages = <String>[];
+  final _recentSearches = <String>[];
 
   bool get _isSearching => _textFieldController.text.length >= 2;
 
-  bool _showNoRecentSearches = true;
+  bool _showNoRecentSearchesMessage = true;
   bool _showRecentSearches = false;
   bool _showNoPackagesFound = false;
   bool _showFoundPackages = false;
+
+  void _updateVisualization() {
+    setState(() {
+      _showRecentSearches = _recentSearches.isNotEmpty && !_isSearching;
+
+      _showNoRecentSearchesMessage = _recentSearches.isEmpty && !_isSearching;
+    });
+  }
+
+  void _updateRecentSearchesFromStorage() {
+    final storedRecentSearches =
+        (box.read<List<dynamic>>('packages') ?? []).cast<String>();
+
+    if (storedRecentSearches.isNotEmpty) {
+      _recentSearches.clear();
+      _recentSearches.addAll(storedRecentSearches);
+
+      _updateVisualization();
+    }
+  }
 
   void _searchPackages(String term) async {
     if (_isSearching) {
       setState(() {
         _showNoPackagesFound = false;
-        _showNoRecentSearches = false;
+        _showNoRecentSearchesMessage = false;
         _showRecentSearches = false;
       });
 
@@ -74,7 +87,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _showFoundPackages = false;
       _showNoPackagesFound = false;
-      _showNoRecentSearches = _recentSearches.isEmpty;
+      _showNoRecentSearchesMessage = _recentSearches.isEmpty;
       _showRecentSearches = _recentSearches.isNotEmpty;
       _foundPackages.clear();
     });
@@ -112,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 6,
                 ),
-                if (_showNoRecentSearches)
+                if (_showNoRecentSearchesMessage)
                   const RoundedContainer(
                     child: Text(
                       'No Recent Searches',
@@ -133,11 +146,7 @@ class _HomePageState extends State<HomePage> {
                   PackageList(
                     packages: _foundPackages,
                     onSelectPackage: (String packageName) async {
-                      if (!_recentSearches.contains(packageName)) {
-                        setState(() {
-                          _recentSearches.add(packageName);
-                        });
-                      }
+                      _savePackageOnRecentSearches(packageName);
 
                       await _goToPackageDetailsPage(packageName);
                     },
@@ -152,6 +161,10 @@ class _HomePageState extends State<HomePage> {
                       _foundPackages.clear();
                       _recentSearches.clear();
                     });
+
+                    await box.erase();
+
+                    _updateVisualization();
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -169,5 +182,15 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _savePackageOnRecentSearches(String packageName) async {
+    if (!_recentSearches.contains(packageName)) {
+      setState(() {
+        _recentSearches.insert(0, packageName);
+      });
+
+      await box.write('packages', _recentSearches);
+    }
   }
 }
