@@ -113,6 +113,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _goToPackageDetailsPage(String packageName) {
+    _textFieldFocusNode.unfocus();
+    _textFieldController.clear();
+
     return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => PackageDetailsPage(

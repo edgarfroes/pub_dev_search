@@ -15,10 +15,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter package search',
-      theme: mainTheme,
-      home: const HomePage(),
+    return _DismissKeyboardOnTapOutsideTextField(
+      child: MaterialApp(
+        title: 'Flutter package search',
+        theme: mainTheme,
+        home: const HomePage(),
+      ),
+    );
+  }
+}
+
+class _DismissKeyboardOnTapOutsideTextField extends StatelessWidget {
+  final Widget child;
+  const _DismissKeyboardOnTapOutsideTextField({Key? key, required this.child})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.deferToChild,
+      onTap: () {
+        FocusScope.of(context).unfocus();
+
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: child,
     );
   }
 }
