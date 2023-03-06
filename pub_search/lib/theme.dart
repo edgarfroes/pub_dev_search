@@ -63,4 +63,7 @@ final mainTheme = ThemeData(
     refreshBackgroundColor: colorScheme.shade900,
     linearTrackColor: colorScheme.shade900,
   ),
+  iconTheme: IconThemeData(
+    color: colorScheme.shade500,
+  ),
 );
