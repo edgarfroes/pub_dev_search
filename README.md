@@ -28,7 +28,13 @@ Once I was satisfied with the bulk of the work and having a 100% functional app,
 
 As a requirement, the app needed to have an animation when the user enters the search text field. This animation was entirely done with [rive](rive.app), which is a very cool 2D animation tool that's 100% compatible with Flutter. The original source file of the animation is available in [available here](https://github.com/edgarfroes/pub_dev_search/blob/main/assets/search_to_cursor_animation.rev), you can import it in the rive editor.
 
-## Automatic E2E testing
+## Automatic test
+
+### Unit and Widgets tests
+
+To run Widget tests, navigate to the `pub_search` directory and run `flutter test test`.
+
+### E2E tests
 
 For E2E testing, install [maestro](https://maestro.mobile.dev/), install the app in a device (Android emulator/physical device or iOS simulator) with `flutter install [ios/apk]` and run the following command in the `pub_search` directory:
 

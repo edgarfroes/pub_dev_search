@@ -53,7 +53,10 @@ void main() {
       );
       expect(animatedOpacityFinder, findsOneWidget);
 
-      await tester.tap(textFieldFinder);
+      await tester.tap(
+        textFieldFinder,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -92,7 +95,10 @@ void main() {
         equals(0),
       );
 
-      await tester.tap(textFieldFinder);
+      await tester.tap(
+        textFieldFinder,
+        warnIfMissed: false,
+      );
       await tester.pumpAndSettle();
 
       for (var i = 0; i < text.length; i++) {
