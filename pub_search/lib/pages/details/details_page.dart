@@ -38,13 +38,17 @@ class _DetailsPage extends GetView<DetailsPageController> {
                 const SizedBox(
                   height: 100,
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_circle_left_outlined),
-                  iconSize: 50,
-                  padding: EdgeInsets.zero,
+                Semantics(
+                  label: 'Go back to the previous page',
+                  button: true,
+                  excludeSemantics: true,
+                  onTap: Get.back,
+                  child: IconButton(
+                    onPressed: Get.back,
+                    icon: const Icon(Icons.arrow_circle_left_outlined),
+                    iconSize: 50,
+                    padding: EdgeInsets.zero,
+                  ),
                 ),
                 const SizedBox(
                   height: 6,
@@ -81,7 +85,7 @@ class _DetailsPage extends GetView<DetailsPageController> {
                                           description: 'LIKES',
                                         ),
                                         PackageStatistic(
-                                          value: '${state.popularity}',
+                                          value: '${state.pubPoints}',
                                           description: 'PUB POINTS',
                                         ),
                                         PackageStatistic(

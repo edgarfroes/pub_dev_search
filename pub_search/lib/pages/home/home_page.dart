@@ -60,6 +60,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ],
+                  addSemanticIndexes: false,
                 ),
               ),
               SliverFillRemaining(

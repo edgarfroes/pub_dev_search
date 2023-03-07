@@ -1,0 +1,20 @@
+appId: com.concepta.pubsearch
+---
+- launchApp:
+      clearState: true
+      clearKeychain: true
+      stopApp: true
+- assertVisible: "No Recent Searches"
+- tapOn: "Search package name"
+- inputText: "http"
+- tapOn: "Package: http"
+- runFlow: assert_http_package_is_visible.yaml
+- tapOn: "Go back to the previous page"
+- assertVisible: "Recent Searches"
+- assertVisible: "http"
+- tapOn: "Package: http"
+- runFlow: assert_http_package_is_visible.yaml
+- tapOn: "Go back to the previous page"
+- tapOn: "Clear all data"
+- assertVisible: "No Recent Searches"
+- assertNotVisible: "Package: http"

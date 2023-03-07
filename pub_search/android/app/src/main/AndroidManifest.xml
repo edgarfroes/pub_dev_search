@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pub_search">
+    package="com.concepta.pubsearch">
    <application
         android:label="pub_search"
         android:name="${applicationName}"

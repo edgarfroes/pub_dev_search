@@ -95,64 +95,70 @@ class _SearchTextFieldState extends State<SearchTextField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 100),
-      width: _expanded ? expandedWidth : closedWidth,
-      height: closedWidth,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(closedWidth),
-        border: Border.all(
-          color: theme.primaryColor,
-          width: 2,
+    return Semantics(
+      excludeSemantics: true,
+      textField: true,
+      onTap: _focusNode.requestFocus,
+      label: 'Search package name',
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        width: _expanded ? expandedWidth : closedWidth,
+        height: closedWidth,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(closedWidth),
+          border: Border.all(
+            color: theme.primaryColor,
+            width: 2,
+          ),
         ),
-      ),
-      child: Stack(
-        fit: StackFit.loose,
-        alignment: _expanded
-            ? AlignmentDirectional.centerStart
-            : AlignmentDirectional.center,
-        children: [
-          TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            cursorColor: _cursorColor,
-            cursorWidth: 2.3,
-            cursorHeight: 17.3,
-            onChanged: widget.onChanged,
-            maxLines: _expanded ? null : 1,
-            keyboardType: TextInputType.multiline,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 23.1,
+        child: Stack(
+          fit: StackFit.loose,
+          alignment: _expanded
+              ? AlignmentDirectional.centerStart
+              : AlignmentDirectional.center,
+          children: [
+            TextField(
+              controller: _controller,
+              focusNode: _focusNode,
+              cursorColor: _cursorColor,
+              cursorWidth: 2.3,
+              cursorHeight: 17.3,
+              onChanged: widget.onChanged,
+              maxLines: _expanded ? null : 1,
+              keyboardType: TextInputType.multiline,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 23.1,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            left: 14,
-            child: GestureDetector(
-              onTap: _focusNode.requestFocus,
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: AnimatedOpacity(
-                  duration: Duration.zero,
-                  opacity: _showSearchIcon ? 1 : 0,
-                  child: RiveAnimation.asset(
-                    'assets/search_to_cursor_animation.riv',
-                    controllers: [
-                      _startSearchController,
-                      _finishSearchController,
-                    ],
-                    onInit: (Artboard artboard) {
-                      _artboard = artboard;
-                    },
+            Positioned(
+              left: 14,
+              child: GestureDetector(
+                onTap: _focusNode.requestFocus,
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: AnimatedOpacity(
+                    duration: Duration.zero,
+                    opacity: _showSearchIcon ? 1 : 0,
+                    child: RiveAnimation.asset(
+                      'assets/search_to_cursor_animation.riv',
+                      controllers: [
+                        _startSearchController,
+                        _finishSearchController,
+                      ],
+                      onInit: (Artboard artboard) {
+                        _artboard = artboard;
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

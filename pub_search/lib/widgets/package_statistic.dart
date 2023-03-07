@@ -12,26 +12,30 @@ class PackageStatistic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+    return Semantics(
+      excludeSemantics: true,
+      label: '$value $description',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        Text(
-          description,
-          style: const TextStyle(
-            fontSize: 10,
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
+          Text(
+            description,
+            style: const TextStyle(
+              fontSize: 10,
+              color: Colors.white,
+              fontWeight: FontWeight.w400,
+            ),
+            textAlign: TextAlign.left,
           ),
-          textAlign: TextAlign.left,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

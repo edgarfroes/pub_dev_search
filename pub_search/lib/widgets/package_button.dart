@@ -36,33 +36,36 @@ class _PackageButtonState extends State<PackageButton> {
           _isActive = false;
         });
       },
-      child: RawMaterialButton(
-        onPressed: widget.onPressed,
-        fillColor: _isActive ? theme.primaryColor : theme.primaryColorDark,
-        splashColor: theme.primaryColor,
-        animationDuration: Duration.zero,
-        highlightColor: theme.primaryColor,
-        textStyle: theme.textTheme.bodyMedium?.copyWith(
-          color: _isActive ? theme.primaryColorDark : theme.primaryColor,
-          fontWeight: !Platform.isIOS && !Platform.isAndroid && _isActive
-              ? FontWeight.w700
-              : FontWeight.w500,
-        ),
-        onHighlightChanged: (isPressing) {
-          setState(() {
-            _isActive = isPressing;
-          });
-        },
-        clipBehavior: Clip.none,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 34,
-            vertical: 16,
+      child: Semantics(
+        label: 'Package: ${widget.packageName}',
+        child: RawMaterialButton(
+          onPressed: widget.onPressed,
+          fillColor: _isActive ? theme.primaryColor : theme.primaryColorDark,
+          splashColor: theme.primaryColor,
+          animationDuration: Duration.zero,
+          highlightColor: theme.primaryColor,
+          textStyle: theme.textTheme.bodyMedium?.copyWith(
+            color: _isActive ? theme.primaryColorDark : theme.primaryColor,
+            fontWeight: !Platform.isIOS && !Platform.isAndroid && _isActive
+                ? FontWeight.w700
+                : FontWeight.w500,
           ),
-          child: Text(
-            widget.packageName,
-            textAlign: TextAlign.left,
+          onHighlightChanged: (isPressing) {
+            setState(() {
+              _isActive = isPressing;
+            });
+          },
+          clipBehavior: Clip.none,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 34,
+              vertical: 16,
+            ),
+            child: Text(
+              widget.packageName,
+              textAlign: TextAlign.left,
+            ),
           ),
         ),
       ),

@@ -1,0 +1,13 @@
+appId: com.concepta.pubsearch
+---
+- assertVisible: "http"
+- assertVisible:
+    text: "5982 LIKES"
+    optional: true
+- assertVisible:
+    text: "140 PUB POINTS"
+    optional: true
+- assertVisible:
+    text: "99% POPULARITY"
+    optional: true
+- assertVisible: "A composable, multi-platform, Future-based API for HTTP requests."
