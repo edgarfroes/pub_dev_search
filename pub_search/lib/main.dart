@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:pub_api_client/pub_api_client.dart';
 import 'package:pub_search/theme.dart';
 
-import 'pages/details_page.dart';
+import 'pages/details/details_page.dart';
 import 'pages/home/home_page.dart';
 import 'services/local_storage_service.dart';
 import 'services/pub_service.dart';

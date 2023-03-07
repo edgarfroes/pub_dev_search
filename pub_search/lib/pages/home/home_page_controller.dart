@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../services/local_storage_service.dart';
+import '../../services/pub_service.dart';
 import 'recent_searches/recent_searches_controller.dart';
 import 'search_packages/search_packages_results_controller.dart';
 
 class HomePageController extends GetxController {
-  HomePageController({
-    required this.recentSearchesController,
-    required this.searchPackagesResultsController,
-  });
-
   final textFieldController = TextEditingController();
   final textFieldFocusNode = FocusNode();
 
-  final RecentSearchesController recentSearchesController;
-  final SearchPackagesResultsController searchPackagesResultsController;
+  late final RecentSearchesController recentSearchesController;
+  late final SearchPackagesResultsController searchPackagesResultsController;
 
   final isInSearchingMode = false.obs;
 
@@ -24,7 +21,23 @@ class HomePageController extends GetxController {
   void onInit() {
     super.onInit();
 
+    _initDependencies();
+
     textFieldController.addListener(_updateSearchingMode);
+  }
+
+  void _initDependencies() {
+    recentSearchesController = Get.put(
+      RecentSearchesController(
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+    );
+
+    searchPackagesResultsController = Get.put(
+      SearchPackagesResultsController(
+        pubService: Get.find<PubService>(),
+      ),
+    );
   }
 
   void _updateSearchingMode() {

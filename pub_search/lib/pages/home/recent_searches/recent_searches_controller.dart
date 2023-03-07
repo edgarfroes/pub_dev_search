@@ -4,10 +4,10 @@ import '../../../services/local_storage_service.dart';
 
 class RecentSearchesController extends GetxController
     with StateMixin<List<String>> {
-  final LocalStorageService localStorageRepository;
+  final LocalStorageService localStorageService;
 
   RecentSearchesController({
-    required this.localStorageRepository,
+    required this.localStorageService,
   });
 
   @override
@@ -22,8 +22,7 @@ class RecentSearchesController extends GetxController
       change([], status: RxStatus.loading());
 
       final packages =
-          (localStorageRepository.get<List<dynamic>>(_recentPackagesBoxName) ??
-                  [])
+          (localStorageService.get<List<dynamic>>(_recentPackagesBoxName) ?? [])
               .cast<String>();
 
       if (packages.isEmpty) {
@@ -47,13 +46,13 @@ class RecentSearchesController extends GetxController
         status: RxStatus.success(),
       );
 
-      await localStorageRepository.save(_recentPackagesBoxName, state ?? []);
+      await localStorageService.save(_recentPackagesBoxName, state ?? []);
     }
   }
 
   void clear() {
     change([], status: RxStatus.empty());
-    localStorageRepository.erase(_recentPackagesBoxName);
+    localStorageService.erase(_recentPackagesBoxName);
   }
 }
 

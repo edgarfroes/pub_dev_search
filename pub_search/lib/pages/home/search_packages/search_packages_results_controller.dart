@@ -4,17 +4,17 @@ import '../../../services/pub_service.dart';
 
 class SearchPackagesResultsController extends GetxController
     with StateMixin<List<String>> {
-  final PubService pubRepository;
+  final PubService pubService;
 
   SearchPackagesResultsController({
-    required this.pubRepository,
+    required this.pubService,
   });
 
   search(String term) async {
     try {
       change([], status: RxStatus.loading());
 
-      final packages = await pubRepository.search(term: term);
+      final packages = await pubService.search(term: term);
 
       if (packages.isEmpty) {
         change([], status: RxStatus.empty());

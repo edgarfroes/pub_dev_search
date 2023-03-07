@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../services/local_storage_service.dart';
-import '../../services/pub_service.dart';
 import '../../widgets/search_text_field.dart';
 import 'home_page_controller.dart';
 import 'recent_searches/recent_searches.dart';
-import 'recent_searches/recent_searches_controller.dart';
 import 'search_packages/search_packages_results.dart';
-import 'search_packages/search_packages_results_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   static final HomePageController controller = Get.put(
-    HomePageController(
-      recentSearchesController: Get.put(
-        RecentSearchesController(
-          localStorageRepository: Get.find<LocalStorageService>(),
-        ),
-      ),
-      searchPackagesResultsController: Get.put(
-        SearchPackagesResultsController(
-          pubRepository: Get.find<PubService>(),
-        ),
-      ),
-    ),
+    HomePageController(),
   );
 
   @override

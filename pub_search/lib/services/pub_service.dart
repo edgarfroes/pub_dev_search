@@ -23,9 +23,9 @@ class PubService extends GetxService {
     final packageScore = await _client.packageScore(packageName);
 
     return PackageMetrics(
-      grantedPoints: packageScore.grantedPoints ?? 0,
-      likeCount: packageScore.likeCount,
-      popularityScore: ((packageScore.popularityScore ?? 0) * 100).truncate(),
+      pubPoints: packageScore.grantedPoints ?? 0,
+      likes: packageScore.likeCount,
+      popularity: ((packageScore.popularityScore ?? 0) * 100).truncate(),
     );
   }
 
@@ -37,13 +37,13 @@ class PubService extends GetxService {
 }
 
 class PackageMetrics {
-  final int likeCount;
-  final int grantedPoints;
-  final int popularityScore;
+  final int likes;
+  final int pubPoints;
+  final int popularity;
 
   PackageMetrics({
-    required this.likeCount,
-    required this.grantedPoints,
-    required this.popularityScore,
+    required this.likes,
+    required this.pubPoints,
+    required this.popularity,
   });
 }
