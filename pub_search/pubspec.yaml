@@ -12,6 +12,7 @@ dependencies:
   pub_api_client: ^2.4.0
   rive: ^0.10.2
   get_storage: ^2.1.1
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

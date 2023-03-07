@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pub_api_client/pub_api_client.dart';
 
-import 'rounded_container.dart';
+import '../widgets/rounded_container.dart';
 
-class PackageDetailsPage extends StatefulWidget {
-  const PackageDetailsPage({super.key, required this.packageName});
-
-  final String packageName;
+class DetailsPage extends StatefulWidget {
+  const DetailsPage({super.key});
 
   @override
-  State<PackageDetailsPage> createState() => _PackageDetailsPageState();
+  State<DetailsPage> createState() => _DetailsPageState();
 }
 
-class _PackageDetailsPageState extends State<PackageDetailsPage> {
+class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
@@ -43,7 +42,7 @@ class _PackageDetailsPageState extends State<PackageDetailsPage> {
         _loadingPackageStatus = true;
       });
 
-      final packageStatus = await _client.packageScore(widget.packageName);
+      final packageStatus = await _client.packageScore(packageName);
 
       _likes = packageStatus.likeCount;
       _pubPoints = packageStatus.grantedPoints;
@@ -66,7 +65,7 @@ class _PackageDetailsPageState extends State<PackageDetailsPage> {
         _loadingPackageDescription = true;
       });
 
-      final packageInfo = await _client.packageInfo(widget.packageName);
+      final packageInfo = await _client.packageInfo(packageName);
 
       _description = packageInfo.description;
     } catch (e) {
@@ -79,6 +78,8 @@ class _PackageDetailsPageState extends State<PackageDetailsPage> {
       });
     }
   }
+
+  final packageName = Get.arguments['packageName'] as String;
 
   final _client = PubClient();
 
@@ -131,7 +132,7 @@ class _PackageDetailsPageState extends State<PackageDetailsPage> {
                           horizontal: 22,
                           vertical: 13,
                         ),
-                        child: Text(widget.packageName),
+                        child: Text(packageName),
                       ),
                       const Divider(),
                       if (_firstLoading == true)

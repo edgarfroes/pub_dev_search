@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pub_api_client/pub_api_client.dart';
 import 'package:pub_search/theme.dart';
 
-import 'home_page.dart';
+import 'pages/details_page.dart';
+import 'pages/home/home_page.dart';
+import 'services/local_storage_service.dart';
+import 'services/pub_service.dart';
 
 Future<void> main() async {
-  await GetStorage.init();
+  await _injectDependencies();
 
   runApp(const MyApp());
+}
+
+Future<void> _injectDependencies() async {
+  Get.put(LocalStorageService(storage: GetStorage()));
+  Get.put(PubService(client: PubClient()));
+  await Get.find<LocalStorageService>().init();
 }
 
 class MyApp extends StatelessWidget {
@@ -16,10 +27,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _DismissKeyboardOnTapOutsideTextField(
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Flutter package search',
         theme: mainTheme,
-        home: const HomePage(),
+        initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => const HomePage()),
+          GetPage(name: '/details', page: () => const DetailsPage()),
+        ],
       ),
     );
   }
