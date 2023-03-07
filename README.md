@@ -5,8 +5,11 @@ An app for searching packages on pub.dev
 ## Getting Started
 
 1 - Install [Flutter](https://docs.flutter.dev/get-started/install) in your local environment.
+
 2 - Navigate to the `pub_cache` folder and run `flutter pub get`.
+
 3 - Start an iOS Simulator or an Android emulator and run `flutter run`.
+
 
 ## Documentation
 
@@ -21,10 +24,18 @@ I've used a 80/20 approach to develop this app, where I've invested 20% of the t
 
 Once I was satisfied with the bulk of the work and having a 100% functional app, it was time to dive into the details, which is basically investing 80% of the time in 20% of the work. This is where I started state management, architecture, and dependency injection in order to hit the next level of code quality and maintainability.
 
-## E2E testing
+## Animation
+
+As a requirement, the app needed to have an animation when the user enters the search text field. This animation was entirely done with [rive](rive.app), which is a very cool 2D animation tool that's 100% compatible with Flutter. The original source file of the animation is available in [available here](https://github.com/edgarfroes/pub_dev_search/blob/main/assets/search_to_cursor_animation.rev), you can import it in the rive editor.
+
+## Automatic E2E testing
 
 For E2E testing, install [maestro](https://maestro.mobile.dev/), install the app in a device (Android emulator/physical device or iOS simulator) with `flutter install [ios/apk]` and run the following command in the `pub_search` directory:
 
 ```
 maestro run tests/E2E/smoke_test.yaml
 ```
+
+Here's it running. Bear in mind that everything happening is entirely automatic and can be integrated to CI/CD.
+
+<video src='https://user-images.githubusercontent.com/4291391/223315589-0c3d9dca-9b37-443d-b759-38be85f82e34.mov' width=180/>
