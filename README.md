@@ -1,6 +1,6 @@
 # pub_search
 
-An app for searching packages on pub.dev
+A Flutter app app for searching packages on pub.dev
 
 ## Getting Started
 
