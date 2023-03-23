@@ -16,6 +16,7 @@ A Flutter app app for searching packages on pub.dev
 This app is part of a coding test for the Concepta company. The documentation is available below.
 
 [Flutter developer test](https://concepta.notion.site/concepta/Flutter-Developer-Test-f8f6dd7f92fe422c819a1ae0393237a4#3c1ab656d6a945b7bd0b22294d2723f6)
+
 [Figma](https://www.figma.com/file/25VUUkIB52nRwtkq8iFuGS/Flutter-Reference?node-id=1%3A22&t=RATKro3zSybWKtKI-0)
 
 ## The 80/20 approach
